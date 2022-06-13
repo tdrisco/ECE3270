@@ -1,0 +1,19 @@
+#!/bin/bash
+PROJECT=convolution_cl
+set -e -x
+export CL_CONTEXT_EMULATOR_DEVICE_ALTERA=1
+export AOCL_BOARD_PACKAGE_ROOT="/usr/commercial_amd64/altera/15.1/hld/board/bittware/s5_mac"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ALTERAOCLSDKROOT/host/linux64/lib:$AOCL_BOARD_PACKAGE_ROOT/linux64/lib
+
+aoc -g -v  -march=emulator ../device/${PROJECT}.cl
+
+
+make clean
+make
+mv $PROJECT.aocx bin/
+
+cd bin
+#write script to run (./a.out)
+./convolution_cl bintest.bin
+./convolution_cl bintest2.bin
+
